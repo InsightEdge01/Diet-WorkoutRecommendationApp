@@ -19,29 +19,27 @@ llm = OpenAI(temperature=0.9)
 
 
 prompt_template = PromptTemplate(
-    input_variables=['age', 'gender', 'weight', 'height', 'veg_or_nonveg', 'disease', 'address', 'allergies'],
+    input_variables=['age', 'gender', 'weight', 'height', 'veg_or_nonveg', 'address', 'allergies'],
     template="Diet Recommendation System:\n"
              "I want you to recommend 5 restaurants names, 5 breakfast names, 5 dinner names, and 5 workout names, "
              "based on the following criteria:\n"
-             "Person age: {age}\n"
-             "Person gender: {gender}\n"
-             "Person weight: {weight}\n"
-             "Person height: {height}\n"
-             "Person veg_or_nonveg: {veg_or_nonveg}\n"
-             "Person Health condition: {disease}\n"
-             "Person address: {address}\n"
-             "Person Food allergies: {allergies}."
+             "Age: {age}\n"
+             "Gender: {gender}\n"
+             "Weight: {weight}\n"
+             "Height: {height}\n"
+             "Veg_or_Nonveg: {veg_or_nonveg}\n"
+             "Address: {address}\n"
+             "Food allergies: {allergies}."
              
 )
 
-age = st.number_input("Person age", min_value=0)
-gender = st.selectbox("Person gender", ["Male", "Female", "Other"])
-weight = st.number_input("Person weight (pounds)", min_value=0)
-height = st.number_input("Person height (cm)", min_value=0)
+age = st.number_input("Age", min_value=0)
+gender = st.selectbox("Gender", ["Male", "Female", "Other"])
+weight = st.number_input("Weight (pounds)", min_value=0)
+height = st.number_input("Height (cm)", min_value=0)
 veg_or_nonveg = st.selectbox("Veg or Non-Veg", ["Veg", "Non-Veg"])
-disease = st.text_input("Person Health condition")
-address = st.text_input("Person address")
-allergies = st.text_input("Person Food allergies")
+address = st.text_input("Address")
+allergies = st.text_input("Food allergies")
 
 if st.button("Get Recommendations"):
     chain = LLMChain(llm=llm, prompt=prompt_template)
@@ -51,7 +49,6 @@ if st.button("Get Recommendations"):
         'weight': weight,
         'height': height,
         'veg_or_nonveg': veg_or_nonveg,
-        'disease': disease,
         'address': address,
         'allergies': allergies
     }
@@ -67,7 +64,7 @@ if st.button("Get Recommendations"):
     restaurant_matches = re.findall(r'Restaurants:(.*?)Breakfast:', results, re.DOTALL)
     if restaurant_matches:
         restaurant_names = [name.strip() for name in restaurant_matches[0].strip().split('\n') if name.strip()]
-
+ 
     breakfast_matches = re.findall(r'Breakfast:(.*?)Dinner:', results, re.DOTALL)
     if breakfast_matches:
         breakfast_names = [name.strip() for name in breakfast_matches[0].strip().split('\n') if name.strip()]
