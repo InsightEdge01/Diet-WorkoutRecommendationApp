@@ -1,0 +1,4 @@
+langchain
+ctransformers
+streamlit
+openai
